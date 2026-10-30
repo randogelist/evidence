@@ -1,79 +1,13 @@
-import ZetaBetaHankel.Zeta357VerifiedChain
+import ZetaBetaHankel.Zeta357AdmittedCoordinates
 import ZetaBetaHankel.Audit
 
-/- Independent audit entry point. Run directly after building dependencies.
-It is intentionally not part of the build targets whose output can be replayed
-from Lake traces. The source contains no proofs or admissions. -/
+/- Fresh audit of the fixed coordinate admission and conditional skeleton.
+The single named coordinate axiom is intentional and must remain visible.
+No cofinality or extension theorem is admitted here. -/
 set_option format.width 100000
 set_option pp.fullNames true
 set_option pp.universes true
 
-#check @ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
-#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
-#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
-#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
-#check @ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
-#check @ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
-#check @ZetaBetaHankel.Zeta357DigitAdmission.actualCanonicalSemantics
-#check @ZetaBetaHankel.Zeta357DigitAdmission.actualN0Admission
-#check @ZetaBetaHankel.Zeta357DigitAdmission.goodAt_zero
-#check @ZetaBetaHankel.Zeta357Canonical.raw_determinant3_identity
-#check @ZetaBetaHankel.Zeta357Canonical.raw_determinant5_identity
-#check @ZetaBetaHankel.Zeta357Canonical.raw_determinant7_identity
-#check @ZetaBetaHankel.Zeta357Analytic.actual_zeta3_enclosed
-#check @ZetaBetaHankel.Zeta357Analytic.actual_zeta5_enclosed
-#check @ZetaBetaHankel.Zeta357Analytic.actual_zeta7_enclosed
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization3_checked
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization5_checked
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization7_checked
-#check @ZetaBetaHankel.Zeta357DigitAdmission.eval_map_polyOfCoeffs
-#check @ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_cons_success
-#check @ZetaBetaHankel.Zeta357DigitAdmission.step_sound
-#check @ZetaBetaHankel.Zeta357DigitAdmission.coeff_polyOfCoeffs
-#check @ZetaBetaHankel.Zeta357DigitAdmission.natDegree_polyOfCoeffs
-#check @ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial3
-#check @ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial5
-#check @ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial7
-#check @ZetaBetaHankel.Zeta357Canonical.detCertificateChecks_sound
-#check @ZetaBetaHankel.Zeta357Canonical.integer_polynomial_eq_of_evaluations
-#check @ZetaBetaHankel.Zeta357Canonical.singleDelta_of_integer_det
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.bernoulliPrime_table
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.bernoulli_table
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.primitiveNorm_literal
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.source_scaled_normalization
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.muFunctional_from_parts
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.source_division_of_coordinates
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.source_moment_of_integer_checks
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil3
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil5
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil7
-#check @ZetaBetaHankel.Zeta357EtaArithmetic.updateBoxes_sound
-#check @ZetaBetaHankel.Zeta357EtaArithmetic.advanceBoxes_sound
-#check @ZetaBetaHankel.Zeta357EtaArithmetic.finiteEta_eq_sum
-#check @ZetaBetaHankel.Zeta357EtaArithmetic.ChunkCheck_sound
-#check @ZetaBetaHankel.Zeta357EtaArithmetic.bracket_of_approximation
-#check @ZetaBetaHankel.Zeta357Analytic.finiteEta_source_bounds_succ
-#check @ZetaBetaHankel.Zeta357Canonical.detCertificateChecks_of_rows
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.rationalLiteral_eq_of_QEq
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.geometrySourceDN
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.geometrySourceTail
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.geometryDivision
-#check @ZetaBetaHankel.Zeta357CanonicalArithmetic.geometryRemDegree
-#check @ZetaBetaHankel.Zeta357Euler.euler_transform
-#check @ZetaBetaHankel.Zeta357Euler.euler_remainder_bound
-#check @ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
-#check @ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
-#check @ZetaBetaHankel.Zeta357Chain.good_large_quadratic
-#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
-#check @ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
-#check @ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
-#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
-#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
-#check @ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
-#check @ZetaBetaHankel.Zeta357VerifiedChain.actual_cofinal_of_extension
-#check @ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational_of_extension
-#check @ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational
-#check @ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational_via_admission
 #check @ZetaBetaHankel.USPD.degree_lt_cutoffScale
 #check @ZetaBetaHankel.USPD.index_lt_cutoffScale
 #check @ZetaBetaHankel.USPD.integer_polynomial_squeeze
@@ -90,75 +24,30 @@ set_option pp.universes true
 #check @ZetaBetaHankel.Zeta357CandidateN0.scale_zero_eq_40
 #check @ZetaBetaHankel.Zeta357CandidateN0.good_zero_of_admission
 #check @ZetaBetaHankel.Zeta357CandidateN0.cofinal_of_extension
+#check @ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
+#check @ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
+#check @ZetaBetaHankel.Zeta357Chain.good_large_quadratic
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
+#check @ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
+#check @ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
+#check @ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
+#check @ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.goodAt_zero
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCofinal_of_extension
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actual_zeta357_irrational
 
+#print ZetaBetaHankel.Zeta357DigitAdmission.CanonicalSemantics
 #print ZetaBetaHankel.Zeta357Chain.StrictExtension
 
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.actualCanonicalSemantics
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.actualN0Admission
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.goodAt_zero
-#print axioms ZetaBetaHankel.Zeta357Canonical.raw_determinant3_identity
-#print axioms ZetaBetaHankel.Zeta357Canonical.raw_determinant5_identity
-#print axioms ZetaBetaHankel.Zeta357Canonical.raw_determinant7_identity
-#print axioms ZetaBetaHankel.Zeta357Analytic.actual_zeta3_enclosed
-#print axioms ZetaBetaHankel.Zeta357Analytic.actual_zeta5_enclosed
-#print axioms ZetaBetaHankel.Zeta357Analytic.actual_zeta7_enclosed
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization3_checked
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization5_checked
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.normalization7_checked
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.eval_map_polyOfCoeffs
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_cons_success
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.step_sound
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.coeff_polyOfCoeffs
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.natDegree_polyOfCoeffs
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial3
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial5
-#print axioms ZetaBetaHankel.Zeta357DigitAdmission.canonicalPolynomial7
-#print axioms ZetaBetaHankel.Zeta357Canonical.detCertificateChecks_sound
-#print axioms ZetaBetaHankel.Zeta357Canonical.integer_polynomial_eq_of_evaluations
-#print axioms ZetaBetaHankel.Zeta357Canonical.singleDelta_of_integer_det
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.bernoulliPrime_table
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.bernoulli_table
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.primitiveNorm_literal
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.source_scaled_normalization
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.muFunctional_from_parts
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.source_division_of_coordinates
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.source_moment_of_integer_checks
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil3
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil5
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.sourcePencil7
-#print axioms ZetaBetaHankel.Zeta357EtaArithmetic.updateBoxes_sound
-#print axioms ZetaBetaHankel.Zeta357EtaArithmetic.advanceBoxes_sound
-#print axioms ZetaBetaHankel.Zeta357EtaArithmetic.finiteEta_eq_sum
-#print axioms ZetaBetaHankel.Zeta357EtaArithmetic.ChunkCheck_sound
-#print axioms ZetaBetaHankel.Zeta357EtaArithmetic.bracket_of_approximation
-#print axioms ZetaBetaHankel.Zeta357Analytic.finiteEta_source_bounds_succ
-#print axioms ZetaBetaHankel.Zeta357Canonical.detCertificateChecks_of_rows
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.rationalLiteral_eq_of_QEq
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.geometrySourceDN
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.geometrySourceTail
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.geometryDivision
-#print axioms ZetaBetaHankel.Zeta357CanonicalArithmetic.geometryRemDegree
-#print axioms ZetaBetaHankel.Zeta357Euler.euler_transform
-#print axioms ZetaBetaHankel.Zeta357Euler.euler_remainder_bound
-#print axioms ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
-#print axioms ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
-#print axioms ZetaBetaHankel.Zeta357Chain.good_large_quadratic
-#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
-#print axioms ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
-#print axioms ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
-#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
-#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
-#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
-#print axioms ZetaBetaHankel.Zeta357VerifiedChain.actual_cofinal_of_extension
-#print axioms ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational_of_extension
-#print axioms ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational
-#print axioms ZetaBetaHankel.Zeta357VerifiedChain.actual_zeta357_irrational_via_admission
 #print axioms ZetaBetaHankel.USPD.degree_lt_cutoffScale
 #print axioms ZetaBetaHankel.USPD.index_lt_cutoffScale
 #print axioms ZetaBetaHankel.USPD.integer_polynomial_squeeze
@@ -175,3 +64,23 @@ set_option pp.universes true
 #print axioms ZetaBetaHankel.Zeta357CandidateN0.scale_zero_eq_40
 #print axioms ZetaBetaHankel.Zeta357CandidateN0.good_zero_of_admission
 #print axioms ZetaBetaHankel.Zeta357CandidateN0.cofinal_of_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
+#print axioms ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
+#print axioms ZetaBetaHankel.Zeta357Chain.good_large_quadratic
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.goodAt_zero
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCofinal_of_extension
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actual_zeta357_irrational

@@ -20,7 +20,7 @@ from audit import lean_code
 
 ROOT = Path(__file__).resolve().parent.parent
 LOCAL_PREFIX = "ZetaBetaHankel"
-TARGETS = ("ZetaBetaHankel.Zeta357VerifiedChain", "ZetaBetaHankel.Audit", "ZetaBetaHankel.Zeta357NativeAudit")
+TARGETS = ("ZetaBetaHankel.Zeta357AdmittedCoordinates", "ZetaBetaHankel.Audit", "ZetaBetaHankel.Zeta357AdmittedNativeAudit")
 MAX_PROCESSES = 2
 LEAN_THREADS = 2
 TIMEOUT_SECONDS = 20 * 60

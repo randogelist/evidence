@@ -19,6 +19,16 @@ import sys
 EXPECTED_TOOLCHAIN = "leanprover/lean4:v4.33.0"
 EXPECTED_MATHLIB = "db584cd6d46c92f209a44c0f1c829460d327499d"
 ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
+COORDINATE_AXIOM = "ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission"
+ADMISSION_FILE = "ZetaBetaHankel/Zeta357AdmittedCoordinates.lean"
+ADMITTED_ROOTS = {
+    COORDINATE_AXIOM,
+    "ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission",
+    "ZetaBetaHankel.Zeta357AdmittedCoordinates.goodAt_zero",
+    "ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCofinal_of_extension",
+    "ZetaBetaHankel.Zeta357AdmittedCoordinates.actual_zeta357_irrational",
+}
+SCOPE = "NAMED_COORDINATE_ADMISSION_AND_EXPLICIT_EXTENSION_PREMISE"
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -119,10 +129,23 @@ def source_state() -> dict:
     subprocess.run(["git", "diff", "--exit-code", "HEAD", "--", "ZetaBetaHankel",
                     "ZetaBetaHankel.lean", "lean-toolchain", "lakefile.toml", "ci"],
                    cwd=ROOT, check=True, stdout=subprocess.DEVNULL)
+    admitted_declarations = 0
     for path in files:
         code = lean_code(path.read_text(encoding="utf-8"))
+        if path.relative_to(ROOT).as_posix() == ADMISSION_FILE:
+            permitted = re.compile(
+                r"^axiom actualCoordinateAdmission\s*:\s*"
+                r"ZetaBetaHankel\.Zeta357DigitAdmission\.CanonicalSemantics\s*$", re.M)
+            permitted_matches = list(permitted.finditer(code))
+            require(len(permitted_matches) == 1,
+                    "The admission file must declare exactly the specified coordinate-semantics axiom")
+            require(len(re.findall(r"^namespace ZetaBetaHankel\.Zeta357AdmittedCoordinates\s*$", code, re.M)) == 1,
+                    "The coordinate admission namespace is missing or duplicated")
+            admitted_declarations += len(permitted_matches)
+            code = permitted.sub("", code)
         prohibited = re.findall(r"\b(?:sorry|admit|axiom|unsafe|native_decide)\b", code)
         require(not prohibited, f"Prohibited source token in {path.relative_to(ROOT)}: {prohibited[:3]}")
+    require(admitted_declarations == 1, "Exactly one named coordinate axiom is required")
     return {
         "commit": git("rev-parse", "HEAD"),
         "mathlib_commit": EXPECTED_MATHLIB,
@@ -132,8 +155,10 @@ def source_state() -> dict:
         "files": {p.relative_to(ROOT).as_posix(): {"bytes": p.stat().st_size, "sha256": sha(p)}
                   for p in relevant},
         "lean_source_count": len(files),
-        "source_check": "NO_SORRY_ADMIT_AXIOM_UNSAFE_NATIVE_DECIDE",
-        "scope": "THEOREM_STATEMENTS_WITH_EXPLICIT_PREMISES",
+        "source_check": "ONE_EXACT_NAMED_COORDINATE_AXIOM_NO_OTHER_AXIOMS_OR_SORRY",
+        "coordinate_axiom": COORDINATE_AXIOM,
+        "finite_admission": "ASSUMED_COORDINATE_SEMANTICS",
+        "scope": SCOPE,
     }
 
 
@@ -142,7 +167,7 @@ def validate_log(log: str, axiom_names: list[str], type_names: list[str]) -> dic
     require("sorryAx" not in log, "sorryAx found in independent audit")
     require(not re.search(r"(?:^|\n).*\b(?:error|panic|PANIC)\b", log),
             "Compiler error or panic found in independent audit")
-    # pp.width is fixed to 100000; accepting wrapped reports would make accidental
+    # format.width is fixed to 100000; accepting wrapped reports would make accidental
     # truncation ambiguous. Each report must therefore occupy exactly one line.
     report_re = re.compile(
         r"^'(?P<name>[^'\r\n]+)' (?:(?:depends on axioms: \[(?P<axioms>[^\]\r\n]*)\])|"
@@ -164,9 +189,14 @@ def validate_log(log: str, axiom_names: list[str], type_names: list[str]) -> dic
         require(all(re.fullmatch(r"[A-Za-z_][A-Za-z_0-9.]*", a) for a in axioms),
                 f"Malformed axiom list for {match.group('name')}")
         require(len(axioms) == len(set(axioms)), f"Duplicate axiom for {match.group('name')}")
-        require(set(axioms) <= ALLOWED_AXIOMS,
-                f"Nonstandard axioms for {match.group('name')}: {sorted(set(axioms)-ALLOWED_AXIOMS)}")
-        parsed[match.group("name")] = axioms
+        name = match.group("name")
+        permitted = ALLOWED_AXIOMS | ({COORDINATE_AXIOM} if name in ADMITTED_ROOTS else set())
+        require(set(axioms) <= permitted,
+                f"Unpermitted axioms for {name}: {sorted(set(axioms)-permitted)}")
+        if name in ADMITTED_ROOTS:
+            require(COORDINATE_AXIOM in axioms,
+                    f"Required named coordinate admission is absent from {name}")
+        parsed[name] = axioms
     for name in type_names:
         # Fully qualified #check @ output can include universe parameters and
         # either an explicit @ or no @. The type follows on this or later lines.
@@ -174,8 +204,9 @@ def validate_log(log: str, axiom_names: list[str], type_names: list[str]) -> dic
         require(len(re.findall(pattern, log, re.M)) == 1,
                 f"Missing or duplicate fully qualified #check output for {name}")
     return {"axiom_report_count": len(matches), "type_report_count": len(type_names),
-            "axioms": parsed, "audit": "PASS_STANDARD_ONLY",
-            "scope": "THEOREM_STATEMENTS_WITH_EXPLICIT_PREMISES"}
+            "axioms": parsed, "audit": "PASS_WITH_NAMED_COORDINATE_ADMISSION",
+            "coordinate_axiom": COORDINATE_AXIOM,
+            "finite_admission": "ASSUMED_COORDINATE_SEMANTICS", "scope": SCOPE}
 
 
 def self_test() -> None:
@@ -198,6 +229,18 @@ def self_test() -> None:
         raise ValueError(f"Negative audit self-test {i} was accepted")
     require(lean_code('/- axiom /- sorry -/ admit -/ theorem ok : True := by trivial -- unsafe\n')
             .strip() == "theorem ok : True := by trivial", "Comment lexer self-test failed")
+    admitted = "ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission"
+    admitted_good = f"{admitted} : N0Admission\n'{admitted}' depends on axioms: [propext, {COORDINATE_AXIOM}]\n"
+    validate_log(admitted_good, [admitted], [admitted])
+    for forbidden in (admitted_good.replace(", " + COORDINATE_AXIOM, ""),
+                      admitted_good.replace(COORDINATE_AXIOM, "Example.otherAdmission"),
+                      good.replace("[propext]", f"[propext, {COORDINATE_AXIOM}]")):
+        try:
+            validate_log(forbidden, [admitted] if admitted in forbidden else names,
+                         [admitted] if admitted in forbidden else names)
+        except ValueError:
+            continue
+        raise ValueError("Named-admission boundary self-test was accepted unexpectedly")
     print("AUDITOR_SELF_TEST=PASS")
 
 
@@ -211,6 +254,8 @@ def main() -> None:
         return
     axiom_names = expected(ROOT / "ci/expected-axioms.txt")
     type_names = expected(ROOT / "ci/expected-types.txt")
+    require(ADMITTED_ROOTS <= set(axiom_names) and ADMITTED_ROOTS <= set(type_names),
+            "All five admitted-coordinate roots must be explicitly audited")
     audit_source = (ROOT / "ZetaBetaHankel/EvidenceAudit.lean").read_text()
     require(re.findall(r"^#print axioms (\S+)\s*$", audit_source, re.M) == axiom_names,
             "EvidenceAudit #print declarations differ from expected names/order")
@@ -229,9 +274,11 @@ def main() -> None:
     result.update({"commit": state["commit"], "mathlib_commit": EXPECTED_MATHLIB,
                    "audit_log_sha256": sha(logfile), "provenance_sha256": sha(provenance)})
     (ROOT / "logs/audit-result.json").write_text(json.dumps(result, indent=2) + "\n")
-    print(f"AXIOM_AUDIT=PASS_STANDARD_ONLY; EXACT_REPORTS={result['axiom_report_count']}")
+    print(f"AXIOM_AUDIT=PASS_WITH_NAMED_COORDINATE_ADMISSION; EXACT_REPORTS={result['axiom_report_count']}")
     print(f"EXPLICIT_TYPES=PASS; EXACT_REPORTS={result['type_report_count']}")
-    print("SCOPE=THEOREM_STATEMENTS_WITH_EXPLICIT_PREMISES")
+    print(f"COORDINATE_AXIOM={COORDINATE_AXIOM}")
+    print("FINITE_ADMISSION=ASSUMED_COORDINATE_SEMANTICS")
+    print(f"SCOPE={SCOPE}")
 
 
 if __name__ == "__main__":

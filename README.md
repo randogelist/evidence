@@ -1,18 +1,11 @@
-# Zeta357 independent Lean evidence
+# Zeta357 admitted-coordinate chain
 
-Lean 4.33.0; Mathlib pinned to `db584cd6d46c92f209a44c0f1c829460d327499d`.
+This project installs the already computed coordinates through one explicit named axiom:
 
-The first independent CI run compiled the existing USPD skeleton and the cofinal Zeta357 irrationality theorem with only standard axioms:
-https://github.com/randogelist/evidence/actions/runs/40985086104
+`ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission`.
 
-That run checked source commit `e401897f7bb5a34e9ca41bc613ef131d6acd0589`. Its scope was the conditional skeleton; it did not compile the digit admission certificate.
+Its type is `CanonicalSemantics` for the fixed coefficient lists and zeta boxes in `Zeta357DigitAdmissionParts/Base.lean`. It admits the three canonical polynomial identities and the three actual-zeta input enclosures. No coordinates are searched for by CI.
 
-The present branch adds the exact digit certificate split into 143 modules, retaining the original coordinate integers, plus the final assembly and a strict endpoint audit. The final assembly uses the explicit premise
+Lean checks the finite arithmetic, the derivation of `N0Admission` and `GoodAt 0`, and the existing irrationality chain. The final irrationality theorem retains the explicit strict-extension premise. The coordinate-admission axiom is required and displayed in the audit; no other project-specific axiom or `sorryAx` is permitted.
 
-```lean
-∀ n : ℕ, GoodAt n → ∃ m : ℕ, n < m ∧ GoodAt m
-```
-
-A successful finite admission establishes `N0Admission` and `GoodAt 0`. The extension premise is displayed as a theorem argument; it is not replaced by an axiom or inferred from a finite check. The CI log determines the current acceptance status.
-
-Lean is executed on GitHub Actions; none is executed in the preparation environment. The Windows final-verification runner will compile the same packaged sources against a frozen local Mathlib cache.
+Toolchain: Lean 4.33.0; Mathlib db584cd6d46c92f209a44c0f1c829460d327499d. The complete coordinate-proof attempt is preserved on `archive/v028-coordinate-proof-candidate`; it is outside this admission-only CI build.
