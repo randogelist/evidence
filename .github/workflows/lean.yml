@@ -1,0 +1,44 @@
+name: Independent Lean evidence
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: lean-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ci/zeta357-chain
+      - name: Install elan and pinned Lean
+        shell: bash
+        run: |
+          curl -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.elan
+            .lake
+          key: lean-4.33.0-mathlib-db584cd6-${{ hashFiles('lakefile.toml') }}
+      - name: Fetch pinned Mathlib and compiled cache
+        run: |
+          lake update
+          lake exe cache get
+      - name: Compile chain and audit axioms
+        run: bash ci/build.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lean-evidence-${{ github.sha }}
+          path: |
+            logs/
+            lake-manifest.json
+            lean-toolchain
