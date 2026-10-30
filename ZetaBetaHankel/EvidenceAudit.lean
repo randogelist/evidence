@@ -1,0 +1,86 @@
+import ZetaBetaHankel.Zeta357AdmittedCoordinates
+import ZetaBetaHankel.Audit
+
+/- Fresh audit of the fixed coordinate admission and conditional skeleton.
+The single named coordinate axiom is intentional and must remain visible.
+No cofinality or extension theorem is admitted here. -/
+set_option format.width 100000
+set_option pp.fullNames true
+set_option pp.universes true
+
+#check @ZetaBetaHankel.USPD.degree_lt_cutoffScale
+#check @ZetaBetaHankel.USPD.index_lt_cutoffScale
+#check @ZetaBetaHankel.USPD.integer_polynomial_squeeze
+#check @ZetaBetaHankel.USPD.irrational_of_decay
+#check @ZetaBetaHankel.USPD.universal_irrational
+#check @ZetaBetaHankel.USPD.adjacent_coupled_irrational
+#check @ZetaBetaHankel.USPD.all_higher_odd_irrational
+#check @ZetaBetaHankel.USPD.zeta_five_irrational
+#check @ZetaBetaHankel.USPD.coupled35_irrational
+#check @ZetaBetaHankel.USPD.odd_two_step
+#check @ZetaBetaHankel.USPD.adjusted_blueprint_of_uspd
+#check @ZetaBetaHankel.Zeta357CandidateN0.strict_margin
+#check @ZetaBetaHankel.Zeta357CandidateN0.rate_signs
+#check @ZetaBetaHankel.Zeta357CandidateN0.scale_zero_eq_40
+#check @ZetaBetaHankel.Zeta357CandidateN0.good_zero_of_admission
+#check @ZetaBetaHankel.Zeta357CandidateN0.cofinal_of_extension
+#check @ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
+#check @ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
+#check @ZetaBetaHankel.Zeta357Chain.good_large_quadratic
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
+#check @ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
+#check @ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
+#check @ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
+#check @ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
+#check @ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
+#check @ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.goodAt_zero
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCofinal_of_extension
+#check @ZetaBetaHankel.Zeta357AdmittedCoordinates.actual_zeta357_irrational
+
+#print ZetaBetaHankel.Zeta357DigitAdmission.CanonicalSemantics
+#print ZetaBetaHankel.Zeta357Chain.StrictExtension
+
+#print axioms ZetaBetaHankel.USPD.degree_lt_cutoffScale
+#print axioms ZetaBetaHankel.USPD.index_lt_cutoffScale
+#print axioms ZetaBetaHankel.USPD.integer_polynomial_squeeze
+#print axioms ZetaBetaHankel.USPD.irrational_of_decay
+#print axioms ZetaBetaHankel.USPD.universal_irrational
+#print axioms ZetaBetaHankel.USPD.adjacent_coupled_irrational
+#print axioms ZetaBetaHankel.USPD.all_higher_odd_irrational
+#print axioms ZetaBetaHankel.USPD.zeta_five_irrational
+#print axioms ZetaBetaHankel.USPD.coupled35_irrational
+#print axioms ZetaBetaHankel.USPD.odd_two_step
+#print axioms ZetaBetaHankel.USPD.adjusted_blueprint_of_uspd
+#print axioms ZetaBetaHankel.Zeta357CandidateN0.strict_margin
+#print axioms ZetaBetaHankel.Zeta357CandidateN0.rate_signs
+#print axioms ZetaBetaHankel.Zeta357CandidateN0.scale_zero_eq_40
+#print axioms ZetaBetaHankel.Zeta357CandidateN0.good_zero_of_admission
+#print axioms ZetaBetaHankel.Zeta357CandidateN0.cofinal_of_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.irrational_of_cofinal_quadratic_decay
+#print axioms ZetaBetaHankel.Zeta357Chain.log_add_two_le_div_hundred
+#print axioms ZetaBetaHankel.Zeta357Chain.good_large_quadratic
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357Chain.cofinal_of_good_zero_and_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.strictExtension_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_admission_and_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_irrational_of_candidate_extension
+#print axioms ZetaBetaHankel.Zeta357Chain.zeta357_actual_values_of_cofinal
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.checkTrace_sound
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial3_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial5_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.polynomial7_degree
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.coordinates_checked
+#print axioms ZetaBetaHankel.Zeta357DigitAdmission.admission_of_semantics
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCoordinateAdmission
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualN0Admission
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.goodAt_zero
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actualCofinal_of_extension
+#print axioms ZetaBetaHankel.Zeta357AdmittedCoordinates.actual_zeta357_irrational
