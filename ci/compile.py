@@ -24,6 +24,7 @@ TARGETS = ("ZetaBetaHankel.Zeta357VerifiedChain", "ZetaBetaHankel.Audit", "ZetaB
 MAX_PROCESSES = 2
 LEAN_THREADS = 2
 TIMEOUT_SECONDS = 20 * 60
+SHARED_BASE = "ZetaBetaHankel.Zeta357DigitAdmissionParts.Base"
 OUTPUT_ROOT = ROOT / ".lake/build/lib/lean"
 LOG_ROOT = ROOT / "logs/modules"
 MANIFEST = ROOT / "logs/compile-results.json"
@@ -132,6 +133,34 @@ def compile_graph() -> int:
     running: dict[str, tuple[subprocess.Popen, object, float]] = {}
     save()
 
+    def abort_shared_base_failure() -> int:
+        reason = "aborted_due_to_shared_base_failure"
+        for active_name, (process, stream, started) in list(running.items()):
+            stop(process)
+            stream.close()
+            graph[active_name].update({
+                "status": "cancelled", "failure_reason": reason,
+                "returncode": process.returncode,
+                "elapsed_seconds": round(time.monotonic() - started, 3)})
+        running.clear()
+        for entry in graph.values():
+            if entry["status"] == "pending":
+                entry.update({"status": "blocked", "failure_reason": reason,
+                              "blocked_by": [SHARED_BASE]})
+            if entry["status"] != "passed":
+                output = ROOT / entry["output"]
+                for partial in output.parent.glob(output.name + "*"):
+                    if partial.is_file():
+                        partial.unlink()
+                if output.with_suffix(".ilean").is_file():
+                    output.with_suffix(".ilean").unlink()
+        failures = [name for name, entry in graph.items() if entry["status"] != "passed"]
+        metadata.update({"status": "failed", "abort_reason": reason,
+                         "failed_or_blocked": failures})
+        save()
+        print(f"DIRECT_LEAN_DAG=FAIL; REASON={reason}; MODULES={len(graph)}; FAILED_OR_BLOCKED={len(failures)}", flush=True)
+        return 1
+
     def interrupted(signum, _frame):
         raise KeyboardInterrupt(f"Received signal {signum}")
 
@@ -177,6 +206,8 @@ def compile_graph() -> int:
                 print(f"MODULE={name}; STATUS={entry['status'].upper()}; SECONDS={elapsed:.1f}; LOG={entry['log']}", flush=True)
                 del running[name]
                 progress = True
+                if name == SHARED_BASE and not passed:
+                    return abort_shared_base_failure()
 
             # Propagate dependency failures immediately, but continue every
             # independent branch so one run captures all reachable errors.
@@ -203,6 +234,8 @@ def compile_graph() -> int:
                 source = ROOT / entry["source"]
                 if sha(source) != entry["sha256"]:
                     entry.update({"status": "failed", "failure_reason": "SOURCE_CHANGED_BEFORE_COMPILE"})
+                    if name == SHARED_BASE:
+                        return abort_shared_base_failure()
                     progress = True
                     continue
                 logfile = LOG_ROOT / (name + ".log")

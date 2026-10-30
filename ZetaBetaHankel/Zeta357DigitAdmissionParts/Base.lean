@@ -170,14 +170,14 @@ theorem step_sound {D : ℤ} {xb old out : Box} {c : ℤ} {x y : ℝ}
           ((out.lo : ℝ) - (c : ℝ) * (D : ℝ)) * (D : ℝ) +
             (c : ℝ) * (D : ℝ) ^ 2 := by ring
       _ ≤ ((D : ℝ) * y) * ((D : ℝ) * x) + (c : ℝ) * (D : ℝ) ^ 2 :=
-        add_le_add_right hl _
+        add_le_add hl (le_refl _)
       _ = (D : ℝ) * ((D : ℝ) * ((c : ℝ) + x * y)) := by ring
   · apply (mul_le_mul_iff_right₀ hDr).mp
     calc
       (D : ℝ) * ((D : ℝ) * ((c : ℝ) + x * y)) =
           ((D : ℝ) * y) * ((D : ℝ) * x) + (c : ℝ) * (D : ℝ) ^ 2 := by ring
       _ ≤ ((out.hi : ℝ) - (c : ℝ) * (D : ℝ)) * (D : ℝ) +
-          (c : ℝ) * (D : ℝ) ^ 2 := add_le_add_right hu _
+          (c : ℝ) * (D : ℝ) ^ 2 := add_le_add hu (le_refl _)
       _ = (D : ℝ) * (out.hi : ℝ) := by ring
 
 

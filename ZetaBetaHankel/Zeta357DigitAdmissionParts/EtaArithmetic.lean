@@ -387,7 +387,7 @@ theorem bracket_of_approximation {G D : ℤ} {eb zb : Box} {eta z : ℝ}
   have high : z ≤ (ratUpper D zb : ℝ) := by
     apply le_trans _ hur
     apply (le_div_iff₀ hfr).2
-    simpa only [mul_comm] using ha.2.trans (add_le_add_right heq.2 (tail : ℝ))
+    simpa only [mul_comm] using ha.2.trans (add_le_add heq.2 (le_refl (tail : ℝ)))
   constructor
   · change (((zb.lo : ℚ) / (D : ℚ) : ℚ) : ℝ) ≤ z at low
     push_cast at low
