@@ -4,7 +4,7 @@ import ZetaBetaHankel.Audit
 /- Independent audit entry point. Run directly after building dependencies.
 It is intentionally not part of the build targets whose output can be replayed
 from Lake traces. The source contains no proofs or admissions. -/
-set_option pp.width 100000
+set_option format.width 100000
 set_option pp.fullNames true
 set_option pp.universes true
 

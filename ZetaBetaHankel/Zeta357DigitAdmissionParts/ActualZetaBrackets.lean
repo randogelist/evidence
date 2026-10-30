@@ -2,7 +2,7 @@ import ZetaBetaHankel.Zeta357DigitAdmissionParts.AnalyticBridge
 import ZetaBetaHankel.Zeta357DigitAdmissionParts.EtaCoordinates
 
 set_option maxHeartbeats 0
-set_option pp.width 100000
+set_option format.width 100000
 set_option maxRecDepth 200000
 noncomputable section
 

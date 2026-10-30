@@ -1,7 +1,7 @@
 import ZetaBetaHankel.Zeta357CandidateN0
 
 set_option maxHeartbeats 0
-set_option pp.width 100000
+set_option format.width 100000
 set_option maxRecDepth 200000
 noncomputable section
 
@@ -79,7 +79,12 @@ theorem eval_map_polyOfCoeffs (cs : List ℤ) (x : ℝ) :
     ((polyOfCoeffs cs).map (algebraMap ℤ ℝ)).eval x = evalCoeffs cs x := by
   induction cs with
   | nil => simp [polyOfCoeffs, evalCoeffs]
-  | cons c cs ih => simp [polyOfCoeffs, evalCoeffs, ih]
+  | cons c cs ih =>
+      simp only [polyOfCoeffs, Polynomial.map_add, Polynomial.map_mul,
+        Polynomial.map_C, Polynomial.map_X, Polynomial.eval_add,
+        Polynomial.eval_mul, Polynomial.eval_C, Polynomial.eval_X, evalCoeffs]
+      rw [ih]
+      simp
 
 /-- Trace boxes follow ascending coefficient order.  The last box is the
     evaluation of the leading coefficient; the implicit tail is zero. -/
@@ -159,7 +164,7 @@ theorem step_sound {D : ℤ} {xb old out : Box} {c : ℤ} {x y : ℝ}
     · exact_mod_cast h7
     · exact_mod_cast h8
   constructor
-  · apply (mul_le_mul_left hDr).mp
+  · apply (mul_le_mul_iff_right₀ hDr).mp
     calc
       (D : ℝ) * (out.lo : ℝ) =
           ((out.lo : ℝ) - (c : ℝ) * (D : ℝ)) * (D : ℝ) +
@@ -167,7 +172,7 @@ theorem step_sound {D : ℤ} {xb old out : Box} {c : ℤ} {x y : ℝ}
       _ ≤ ((D : ℝ) * y) * ((D : ℝ) * x) + (c : ℝ) * (D : ℝ) ^ 2 :=
         add_le_add_right hl _
       _ = (D : ℝ) * ((D : ℝ) * ((c : ℝ) + x * y)) := by ring
-  · apply (mul_le_mul_left hDr).mp
+  · apply (mul_le_mul_iff_right₀ hDr).mp
     calc
       (D : ℝ) * ((D : ℝ) * ((c : ℝ) + x * y)) =
           ((D : ℝ) * y) * ((D : ℝ) * x) + (c : ℝ) * (D : ℝ) ^ 2 := by ring
@@ -185,9 +190,7 @@ theorem checkTrace_sound {D : ℤ} {xb : Box} {x : ℝ}
   | nil =>
       cases trace with
       | nil =>
-          change (0 : ℝ) ≤ (D : ℝ) * 0 ∧ (D : ℝ) * 0 ≤ 0
-          exact ⟨le_of_eq (mul_zero (D : ℝ)).symm,
-            le_of_eq (mul_zero (D : ℝ))⟩
+          simp [Contains, headBox, zeroBox, evalCoeffs]
       | cons b bs =>
           change (false : Bool) = true at h
           cases h
@@ -297,8 +300,8 @@ theorem admission_of_rational_enclosures
       |value 1 0| ≤ (u3 : ℝ) := h3.2
       _ ≤ Real.exp (-1424 : ℝ) := seed_upper_of_mul_check hu hc
       _ = Real.exp (-epsilon3 * (40 : ℝ) ^ 2) := by
-        congr 1
-        norm_num [epsilon3]
+        exact congrArg Real.exp (by norm_num [epsilon3] :
+          (-1424 : ℝ) = -epsilon3 * (40 : ℝ) ^ 2)
   · refine ⟨hp5.trans_le h5.1, ?_⟩
     have hc : (u5 : ℝ) ≤ (42 : ℝ) ^ 400 * (l3 : ℝ) := by
       exact_mod_cast transfer35Check
@@ -705,7 +708,8 @@ theorem coeff_polyOfCoeffs (cs : List ℤ) (n : ℕ) :
       | succ n =>
           change (Polynomial.C c + Polynomial.X * polyOfCoeffs cs).coeff (n + 1) =
             coeffAt cs n
-          have hc : (Polynomial.C c : Polynomial ℤ).coeff (n + 1) = 0 := by simp
+          have hc : (Polynomial.C c : Polynomial ℤ).coeff (n + 1) = 0 :=
+            Polynomial.coeff_C_succ
           rw [Polynomial.coeff_add, hc, Polynomial.coeff_X_mul, zero_add]
           exact ih n
 

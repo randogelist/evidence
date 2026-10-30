@@ -4,7 +4,7 @@ import ZetaBetaHankel.Zeta357DigitAdmissionParts.CanonicalData5
 import ZetaBetaHankel.Zeta357DigitAdmissionParts.CanonicalData7
 
 set_option maxHeartbeats 0
-set_option pp.width 100000
+set_option format.width 100000
 set_option maxRecDepth 200000
 noncomputable section
 

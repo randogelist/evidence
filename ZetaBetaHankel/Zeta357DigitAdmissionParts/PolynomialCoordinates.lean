@@ -1,7 +1,7 @@
 import ZetaBetaHankel.Zeta357DigitAdmissionParts.PrimitiveNormalization
 
 set_option maxHeartbeats 0
-set_option pp.width 100000
+set_option format.width 100000
 set_option maxRecDepth 200000
 noncomputable section
 
@@ -27,7 +27,7 @@ theorem qHorner_coeff (cs : List ℚ) (n : ℕ) :
       simp only [Polynomial.coeff_C_zero, add_zero]
     | succ n =>
       change (C a + X * qHorner cs).coeff (n + 1) = ratAt cs n
-      have hc : (C a : ℚ[X]).coeff (n + 1) = 0 := by simp
+      have hc : (C a : ℚ[X]).coeff (n + 1) = 0 := Polynomial.coeff_C_succ
       rw [Polynomial.coeff_add, hc, Polynomial.coeff_X_mul, zero_add]
       exact ih n
 

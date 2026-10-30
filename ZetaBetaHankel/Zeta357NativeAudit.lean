@@ -1,6 +1,6 @@
 import ZetaBetaHankel.Zeta357VerifiedChain
 
-set_option pp.width 100000
+set_option format.width 100000
 set_option pp.fullNames true
 
 -- Exact endpoint signatures are part of the native receipt.
